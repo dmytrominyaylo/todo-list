@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>TO DO list <a style="float: right" href="{% url 'task:task-create' %}">Add task</a></h1>
+  <h4>Number of tasks: {{ num_tasks }}</h4>
+  <h4>Number of tags: {{ num_tags }}</h4>
+  <br>
+
+  {% for task in tasks %}
+    <p>
+      <strong>{{ task.content }}</strong>
+      {% if task.done %}
+        <strong style="color: green">Done</strong>
+        <a style="float: right" href="{% url 'task:task-change' pk=task.id %}"
+           class="btn btn-warning btn-sm ml-2">Undo</a>
+      {% else %}
+        <strong style="color: red">Not done</strong>
+        <a style="float: right" href="{% url 'task:task-change' pk=task.id %}" class="btn btn-success btn-sm ml-2">Complete</a>
+      {% endif %}
+    </p>
+    <p>Created at: {{ task.created_at }}</p>
+    {% for tag in task.tags.all %}
+      <p>Tags: {{ tag.name }}
+        <a href="{% url 'task:task-update' pk=task.id %}">Update</a>
+        <a href="{% url 'task:task-delete' pk=task.id %}">Delete</a>
+      </p>
+    {% endfor %}
+    <hr>
+  {% endfor %}
+{% endblock %}
